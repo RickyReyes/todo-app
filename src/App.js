@@ -5,7 +5,7 @@ import { ThemeContext } from "./themeContext"
 function App() {
   const [newTodo, setNewTodo] = useState('')
   const [id, setId] = useState(0)
-  const [allTodos, setAllTodos] = useState([])
+  const [allTodos, setAllTodos] = useState(localStorage.getItem('allTodos') ? JSON.parse(localStorage.getItem('allTodos')) : [])
   const [currentFilter, setCurrentFilter] = useState('All')
   const renderedTodos = 
     currentFilter === 'Active' ? allTodos.filter(todo => !todo.completed) : 
@@ -20,6 +20,10 @@ function App() {
 
   useEffect(() => {
     setId(prevId => prevId + 1)
+  }, [allTodos])
+
+  useEffect(() => {
+    localStorage.setItem('allTodos', JSON.stringify(allTodos))
   }, [allTodos])
 
   const inputRef = useRef(null)
