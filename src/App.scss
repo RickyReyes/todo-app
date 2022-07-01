@@ -123,11 +123,12 @@ main {
   border-color: $light-grayish-blue;
 }
 
-.empty-circle:hover {
-  border: 3px solid $bright-blue;
-}
 
 @media (hover: hover) and (pointer: fine) {
+  .empty-circle:hover {
+    border: 3px solid $bright-blue;
+  }
+  
   .new-todo--empty-circle.light:hover {
     border: 1px solid $lt-light-grayish-blue
   }
