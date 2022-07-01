@@ -4,7 +4,6 @@ import { ThemeContext } from "./themeContext"
 
 function App() {
   const [newTodo, setNewTodo] = useState('')
-  const [id, setId] = useState(0)
   const [allTodos, setAllTodos] = useState(localStorage.getItem('allTodos') ? JSON.parse(localStorage.getItem('allTodos')) : [])
   const [currentFilter, setCurrentFilter] = useState('All')
   const renderedTodos = 
@@ -17,10 +16,6 @@ function App() {
   useEffect(() => {
     document.body.classList = theme
   }, [theme])
-
-  useEffect(() => {
-    setId(prevId => prevId + 1)
-  }, [allTodos])
 
   useEffect(() => {
     localStorage.setItem('allTodos', JSON.stringify(allTodos))
@@ -38,11 +33,15 @@ function App() {
   }
   
   function handleSubmit(e) {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
+      if (newTodo.trim() === '') {
+        alert('Please fill the required field.')
+        return
+      }
       setAllTodos(prevTodos => [
         {name: newTodo,
         completed: false,
-        id: id}, 
+        id: Math.random()}, 
         ...prevTodos
       ])
       setNewTodo('')
