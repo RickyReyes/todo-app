@@ -68,6 +68,23 @@ useEffect(() => {
 }, [inputRef])
 ```
 
+- useContext for light/dark theme
+```js
+const ThemeContext = createContext()
+function ThemeContextProvider(props) {
+  const [theme, setTheme] = useState("dark")
+  function toggleTheme() {
+    setTheme(prevTheme => prevTheme === "dark" ? "light" : "dark")
+  }
+  return (
+    <ThemeContext.Provider value={{theme, toggleTheme}}>
+      {props.children}
+    </ThemeContext.Provider>
+  )
+}
+```
+
+
 ### Useful resource
 
 - [Web Dev Simplified](https://www.youtube.com/WebDevSimplified) - This is where I learned the drag and drop functionality (for desktop).
