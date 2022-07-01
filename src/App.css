@@ -124,12 +124,13 @@ main {
   border: 3px solid #3a7bfd;
 }
 
-.new-todo--empty-circle.light:hover {
-  border: 1px solid #d2d3db;
-}
-
-.new-todo--empty-circle.dark:hover {
-  border: 1px solid #393a4c;
+@media (hover: hover) and (pointer: fine) {
+  .new-todo--empty-circle.light:hover {
+    border: 1px solid #d2d3db;
+  }
+  .new-todo--empty-circle.dark:hover {
+    border: 1px solid #393a4c;
+  }
 }
 
 .empty-circle.completed {

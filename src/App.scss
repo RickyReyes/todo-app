@@ -127,12 +127,14 @@ main {
   border: 3px solid $bright-blue;
 }
 
-.new-todo--empty-circle.light:hover {
-  border: 1px solid $lt-light-grayish-blue
-}
+@media (hover: hover) and (pointer: fine) {
+  .new-todo--empty-circle.light:hover {
+    border: 1px solid $lt-light-grayish-blue
+  }
 
-.new-todo--empty-circle.dark:hover {
-  border: 1px solid $very-dark-grayish-blue
+  .new-todo--empty-circle.dark:hover {
+    border: 1px solid $very-dark-grayish-blue
+  }
 }
 
 .empty-circle.completed {
