@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useContext } from "react"
 import './App.css';
 import { ThemeContext } from "./themeContext"
 
-
 function App() {
   const [newTodo, setNewTodo] = useState('')
   const [id, setId] = useState(0)
@@ -79,6 +78,7 @@ function App() {
     }, {offset: Number.NEGATIVE_INFINITY}).element
   }
 
+  /* drag and drop */
   useEffect(() => {
     const draggables = document.querySelectorAll('.todo')
     const container = document.querySelector('.todo-ul')
@@ -88,6 +88,14 @@ function App() {
       })
 
       draggable.addEventListener('dragend', () => {
+        draggable.classList.remove('dragging')
+      })
+
+      draggable.addEventListener('touchstart', () => {
+        draggable.classList.add('dragging')
+      })
+
+      draggable.addEventListener('touchend', () => {
         draggable.classList.remove('dragging')
       })
     })
@@ -101,22 +109,6 @@ function App() {
         container.insertBefore(draggable, afterElement)
       }
     })
-  }, [allTodos, renderedTodos])
-
-  /* BEGINNING TOUCH FUNCTIONALITY */
-
-  useEffect(() => {
-    const draggables = document.querySelectorAll('.todo')
-    const container = document.querySelector('.todo-ul')
-    draggables.forEach(draggable => {
-      draggable.addEventListener('touchstart', () => {
-        draggable.classList.add('dragging')
-      })
-
-      draggable.addEventListener('touchend', () => {
-        draggable.classList.remove('dragging')
-      })
-    })
 
     container.addEventListener('touchmove', e => {
       e.preventDefault()
@@ -129,8 +121,6 @@ function App() {
       }
     })
   }, [allTodos, renderedTodos])
-
-  /* END TOUCH FUNCTIONALITY */
 
   return (
     <div className={`App ${theme}`}>
