@@ -41,7 +41,7 @@ function App() {
       setAllTodos(prevTodos => [
         {name: newTodo,
         completed: false,
-        id: Math.random()}, 
+        id: Math.random()},
         ...prevTodos
       ])
       setNewTodo('')
@@ -81,7 +81,6 @@ function App() {
     }, {offset: Number.NEGATIVE_INFINITY}).element
   }
 
-  /* drag and drop */
   useEffect(() => {
     const draggables = document.querySelectorAll('.todo')
     const container = document.querySelector('.todo-ul')
@@ -104,6 +103,7 @@ function App() {
     })
 
     container.addEventListener('dragover', e => {
+      e.preventDefault()
       const afterElement = getDragAfterElement(e.clientY)
       const draggable = document.querySelector('.dragging')
       if (afterElement == null) {
@@ -123,6 +123,7 @@ function App() {
         container.insertBefore(draggable, afterElement)
       }
     })
+
   }, [allTodos, renderedTodos])
 
   return (
