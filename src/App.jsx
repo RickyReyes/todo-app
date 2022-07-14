@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useContext } from "react"
 import './App.css';
+
+import Header from "./components/Header";
+import NewTodo from "./components/NewTodo";
+import Todo from "./components/Todo";
+import Filters from "./components/Filters";
 import { ThemeContext } from "./themeContext"
 
 function App() {
@@ -41,7 +46,7 @@ function App() {
       setAllTodos(prevTodos => [
         {name: newTodo,
         completed: false,
-        id: Math.random()},
+        id: Date.now()},
         ...prevTodos
       ])
       setNewTodo('')
@@ -123,79 +128,46 @@ function App() {
         container.insertBefore(draggable, afterElement)
       }
     })
-
   }, [allTodos, renderedTodos])
+
+
+  /* appears on left side of footer. e.g. "1 item left" "3 items left" */
+  const itemsLeftWord = 
+  <p className="items-left">
+    {allTodos.filter(todo => !todo.completed).length + " " +
+  `item${allTodos.filter(todo => !todo.completed).length !== 1 ? 's' : ''} left`}
+  </p>
 
   return (
     <div className={`App ${theme}`}>
-      <header className={theme}>
-        <div className="header-container">
-          <h1>todo</h1>
-          <div 
-          onClick={toggleTheme}
-          className={`toggle-theme-icon ${theme}`}></div>
-        </div>
-      </header>
+      <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
-        <div className="new-todo--container">
-          <div className={`new-todo--empty-circle empty-circle ${theme}`}></div>
-          <input 
-              ref={inputRef}
-              onChange={handleInput}
-              onKeyPress={handleSubmit}
-              className={`new-todo ${theme}`} 
-              type="text"  
-              placeholder="Create a new todo..." 
-              value={newTodo} />
-        </div>
+        <NewTodo inputRef={inputRef} 
+                 handleInput={handleInput}
+                 handleSubmit={handleSubmit}
+                 theme={theme} 
+                 newTodo={newTodo} />
         <ul className="todo-ul">
-          {renderedTodos.map((todo, idx) => (
-            <li 
-            key={idx}
-            className={"todo" + (todo.completed ? ' completed ' : ' ') + theme}
-            draggable={true}>
-              <div onClick={() => toggleCompleted(todo.id)} className={`empty-circle  ${todo.completed ? " completed " : " "} ${theme}`}>
-                {todo.completed && <svg className="completed-check" xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" strokeWidth="2" d="M1 4.304L3.696 7l6-6"/></svg>}
-              </div>
-              <p className="todo-name">{todo.name}</p>
-              <svg onClick={() => handleDelete(todo.id)} className="close-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fillRule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
-            </li>
+          {renderedTodos.map((todo) => (
+            <Todo key={todo.id} 
+                  theme={theme} 
+                  toggleCompleted={toggleCompleted} 
+                  handleDelete={handleDelete} 
+                  todo={todo} />
           ))}
         </ul>
-        {allTodos.length > 0 && <div className={`todo--footer ${theme}`}>
-          <p className="items-left">
-            {allTodos.filter(todo => !todo.completed).length + " " +
-            `item${allTodos.filter(todo => !todo.completed).length !== 1 ? 's' : ''} left`}</p>
-          <div className={`desktop-filter-container filter-container ${theme}`}>
-            <p className={"filter" + (currentFilter == 'All' ? ' current-filter' : '')}
-              onClick={(() => setCurrentFilter('All'))}>
-                All
-            </p>
-            <p className={"filter" + (currentFilter == 'Active' ? ' current-filter' : '')}
-                onClick={(() => setCurrentFilter('Active'))}>
-                  Active
-            </p>
-            <p className={"filter" + (currentFilter == 'Completed' ? ' current-filter' : '')}
-              onClick={(() => setCurrentFilter('Completed'))}>
-              Completed
-            </p>
-          </div>
-          <p className={`clear-completed ${theme}`} onClick={handleDeleteCompleted}>Clear Completed</p>
+        {allTodos.length > 0 && 
+          <div className={`todo--footer ${theme}`}>
+          {itemsLeftWord}
+            <Filters isDesktop={true}
+                    theme={theme} 
+                    currentFilter={currentFilter}
+                    setCurrentFilter={setCurrentFilter} />  
+            <p className={`clear-completed ${theme}`} onClick={handleDeleteCompleted}>Clear Completed</p>
         </div>}
-        <div className={`filter-container ${theme}`}>
-          <p className={"filter" + (currentFilter == 'All' ? ' current-filter' : '')}
-             onClick={(() => setCurrentFilter('All'))}>
-              All
-          </p>
-          <p className={"filter" + (currentFilter == 'Active' ? ' current-filter' : '')}
-              onClick={(() => setCurrentFilter('Active'))}>
-                Active
-          </p>
-          <p className={"filter" + (currentFilter == 'Completed' ? ' current-filter' : '')}
-             onClick={(() => setCurrentFilter('Completed'))}>
-            Completed
-          </p>
-        </div>
+        <Filters theme={theme} 
+                 currentFilter={currentFilter}
+                 setCurrentFilter={setCurrentFilter} />  
         {allTodos.length > 1 && <p className="drag-and-drop-p">Drag and drop to reorder list</p>}
       </main>
     </div>
